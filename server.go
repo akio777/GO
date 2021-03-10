@@ -13,7 +13,7 @@ func MyMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			next(c)
 			return nil
 		}
-		return echo.NewHTTPError(http.StatusUnauthorized, "Please authen")
+		return echo.NewHTTPError(http.StatusUnauthorized, "No Authorization :(")
 		//return http.Error()
 	}
 }
