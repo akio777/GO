@@ -1,15 +1,10 @@
 package main
 
 import (
-	"GO/models"
 	"database/sql"
-	"fmt"
 	"log"
-	"net/http"
 	"os"
-
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"GO/routes"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -24,19 +19,6 @@ import (
 //	Load() error  // SELECT just one record
 //	LoadWhere(cond interface{}, args ...interface{}) error // Alternate Load()
 //}
-
-
-func MyMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		fmt.Println("FROM : " + c.Request().Host + "		-->	 URL : " + c.Request().RequestURI)
-		if c.Request().Header.Get("Authorization") != "" {
-			next(c)
-			return nil
-		}
-		return echo.NewHTTPError(http.StatusUnauthorized, "No Authorization :(")
-		//return http.Error()
-	}
-}
 
 func main() {
 
@@ -70,26 +52,8 @@ func main() {
 		log.Println("ERROR")
 	}
 
-	e := echo.New()
-	e.HideBanner = true
-	// Middleware
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"*"},
-		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
-	}))
-	e.Use(middleware.Recover())
-
-	// Routes
-	e.GET("/", hello, MyMiddleware)
-	// e. POST("/authen/create_user", create, MyMiddleware)
-
-	// Start server
+	e := Routes.Initroute()
 	e.Logger.Fatal(e.Start(":1323"))
+
 }
 
-// Handler
-func hello(c echo.Context) error {
-	temp := models.User{1,"test","123456"}
-	log.Println(temp)
-	return c.String(http.StatusOK, "Hello, World!")
-}
