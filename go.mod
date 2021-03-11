@@ -11,4 +11,6 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.6 // indirect
 	github.com/pelletier/go-toml v1.8.1 // indirect
 	golang.org/x/sys v0.0.0-20210309074719-68d13333faf2 // indirect
+	gorm.io/driver/sqlite v1.1.4 // indirect
+	gorm.io/gorm v1.21.3 // indirect
 )
