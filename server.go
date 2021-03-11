@@ -1,13 +1,15 @@
 package main
 
 import (
+	"GO/models"
 	"database/sql"
 	"fmt"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -22,14 +24,6 @@ import (
 //	Load() error  // SELECT just one record
 //	LoadWhere(cond interface{}, args ...interface{}) error // Alternate Load()
 //}
-
-
-
-type User struct{
-	id int `stbl:"id, AUTO_INCREMENT"`
-	username string `stbl:"username, PRIMARY_KEY"`
-	password string `stbl:"password"`
-}
 
 
 func MyMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
@@ -52,14 +46,12 @@ func main() {
 		if err != nil{
 			log.Fatal(err.Error())
 		}
-		_, err = db.Exec("create database if not exits user_info")
+		_, err = db.Exec("create table if not EXISTS user_info(username text NOT NULL PRIMARY KEY, password text NOT NULL);")
 		if err != nil{
 			log.Fatal(err.Error())
 		}
 
-		//else{
-		//	log.Println("found table")
-		//}
+		
 
 	}else if os.IsNotExist(err) {
 		log.Println("database not found")
@@ -69,16 +61,14 @@ func main() {
 		}
 		file.Close()
 		log.Println("Authen.db created")
+		db, err := sql.Open("sqlite3", "./database/Authen.db")
+		_, err = db.Exec("create table if not EXISTS user_info(username text NOT NULL PRIMARY KEY, password text NOT NULL);")
+		if err != nil{
+			log.Fatal(err.Error())
+		}
 	} else {
 		log.Println("ERROR")
 	}
-
-	//db, err := sql.Open("sqlite3", "./database/Authen.db")
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//defer db.Close()
-	// Echo instance
 
 	e := echo.New()
 	e.HideBanner = true
@@ -91,6 +81,7 @@ func main() {
 
 	// Routes
 	e.GET("/", hello, MyMiddleware)
+	// e. POST("/authen/create_user", create, MyMiddleware)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":1323"))
@@ -98,5 +89,7 @@ func main() {
 
 // Handler
 func hello(c echo.Context) error {
+	temp := models.User{1,"test","123456"}
+	log.Println(temp)
 	return c.String(http.StatusOK, "Hello, World!")
 }
