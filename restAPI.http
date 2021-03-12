@@ -1,0 +1,19 @@
+@baseUrl = http://161.246.6.147:1323
+
+
+POST {{baseUrl}}/authen/login
+Accept: */*
+Content-Type: application/json
+
+{
+    "username" : "admin",
+    "password" : "123456",
+}
+###
+
+POST {{baseUrl}}/authen/add_user
+Accept: */*
+Authorization: something
+Connection: keep-alive
+###
+

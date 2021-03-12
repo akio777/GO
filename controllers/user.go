@@ -20,7 +20,7 @@ func Hello(c echo.Context) error {
 func AddUser(c echo.Context) error{
 	var users []models.User
     Database.DB.Find(&users)
-    log.Println("{}", users)
+    log.Println("User list : ", users)
 	
 	// Database.DB.Create(&models.User{Id: 2,Username: "admin",Password:"123456"})
 	// log.Println("KUY")

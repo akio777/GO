@@ -16,6 +16,7 @@ func Initroute() *echo.Echo{
 	// }))
 	// e.Use(middleware.Recover())
 	e.GET("/", controllers.Hello, abc.MyMiddleware)
+	e.POST("/authen/login", controllers.Login)
 	e.POST("/authen/add_user", controllers.AddUser)
 
 	return e
